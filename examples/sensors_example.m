@@ -9,7 +9,7 @@
 % Add MRG helper functions
 % addpath('mrg'); % COMMENTED OUT
 
-husky_id = 3; % Modify for your Husky
+husky_id = 4; % Modify for your Husky
 
 % Get the channel names and sensor IDs for this Husky
 config = GetHuskyConfig(husky_id);
@@ -49,7 +49,7 @@ while true
     % Display undistorted stereo image
     subplot(1, 4, 3);
     undistorted_stereo_images = UndistortStereoImage(stereo_images, ...
-                                         config.camera_model);
+                                                     config.camera_model);
     ShowStereoImage(undistorted_stereo_images);
     
     subplot(1, 4, 4);
