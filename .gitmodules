@@ -1,0 +1,3 @@
+[submodule "moos/src"]
+	path = moos/src
+	url = https://github.com/themoos/core-moos.git

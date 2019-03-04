@@ -25,6 +25,7 @@ mexmoos('REGISTER', config.wheel_odometry_channel, 0.0);
 pause(3); % Give mexmoos a chance to connect (important!)
 
 % Main loop
+output_directory = 'data/';
 while true
     % Fetch latest messages from mex-moos
     mailbox = mexmoos('FETCH');
@@ -38,17 +39,23 @@ while true
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % Display laser scan
-    subplot(1, 3, 1);
+    subplot(1, 4, 1);
     ShowLaserScan(scan);
     
     % Display stereo image
-    subplot(1, 3, 2);
+    subplot(1, 4, 2);
     ShowStereoImage(stereo_images)
     
     % Display undistorted stereo image
-    subplot(1, 3, 3);
-    ShowStereoImage(UndistortStereoImage(stereo_images, ...
-                                         config.camera_model));
+    subplot(1, 4, 3);
+    undistorted_stereo_images = UndistortStereoImage(stereo_images, ...
+                                         config.camera_model);
+    ShowStereoImage(undistorted_stereo_images);
     
+    subplot(1, 4, 4);
+    plot(scan.reflectances)
+    savefig(output_directory + string(now) + '_figure' + '.fig')
+    save(output_directory + string(now) + '_scan' + '.mat', 'scan')
+    save(output_directory + string(now) + '_images' + '.mat', 'undistorted_stereo_images')
     pause(0.1); % don't overload moos w/commands
 end

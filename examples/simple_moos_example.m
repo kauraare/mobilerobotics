@@ -5,7 +5,7 @@ clear mexmoos;
 
 %% Connect to MOOS
 unique_num = num2str(int32(rand*1e7));
-host = 'localhost'; %'192.168.0.14';
+host = '192.168.0.14';
 client = ['ExampleCdtClient' unique_num];
 mexmoos('init', 'SERVERHOST', host, 'MOOSNAME', client, 'SERVERPORT','9000');
 pause(1.0); % give mexmoos a chance to connect (important!)
