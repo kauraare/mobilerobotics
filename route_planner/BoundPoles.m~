@@ -1,0 +1,16 @@
+function boxes = BoundPoles(pole_positions)
+% Returns a matrix where each row is a box around the poles.
+% boxes is [x_bottom_left, y_bottom_left, width, height]
+
+width = 200;
+height = 200;
+
+sz = size(pole_positions);
+num_poles = sz(1)/2;
+boxes = zeros(num_poles, 
+for i = 1:1:num_poles
+    boxes(i,:) = [pole_position(i)-width, pole_position(i+1)-height,...
+                  width, height];
+end
+
+end
