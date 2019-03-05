@@ -21,8 +21,9 @@ undistorted_stereo_images = UndistortStereoImage(stereo_images, ...
 %left_brightness = sqrt(sum(left_img, 3));
 %normalised_left_img_red = rescale(left_img(:,:,1)./left_brightness, 0, 255);
 baseline = undistorted_stereo_images.baseline;
-height = 
-left_index = FindTarget(undistorted_stereo_images.left.rgb);
-right_index = FindTarget(undistorted_stereo_images.right.rgb);
+focal_length = undistorted_stereo_images.left.fx;
+left_coord = FindTarget(undistorted_stereo_images.left.rgb);
+right_coord = FindTarget(undistorted_stereo_images.right.rgb);
 
 % Do some geometry.
+depth_estimate = focal_length * baseline / (left_coord(1) - right_coord(1));
