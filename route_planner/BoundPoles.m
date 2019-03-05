@@ -1,9 +1,6 @@
-function boxes = BoundPoles(pole_positions)
+function boxes = BoundPoles(pole_positions,width, height)
 % Returns a matrix where each row is a box around the poles.
 % boxes is [x_bottom_left, y_bottom_left, width, height]
-
-width = 200;
-height = 200;
 
 sz = size(pole_positions);
 num_poles = sz(2)/2;

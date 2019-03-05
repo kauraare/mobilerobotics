@@ -14,12 +14,13 @@ mexmoos('REGISTER', config.laser_channel, 0.0);
 mexmoos('REGISTER', config.stereo_channel, 0.0);
 mexmoos('REGISTER', config.wheel_odometry_channel, 0.0);
 
-mexmoos('init', 'SERVERHOST', husky_config.host, 'MOOSNAME', client, 'SERVERPORT','9000');
+mexmoos('init', 'SERVERHOST', config.host, 'MOOSNAME', client, 'SERVERPORT','9000');
 pause(4.0); % give mexmoos a chance to connect (important!)
 
 % First tell it not to move at all
-SendSpeedCommand(0, 0, husky_config.control_channel)
+SendSpeedCommand(0, 0, config.control_channel)
 found_target_flag = 0;
+counter = 1;
 while true
     % Fetch latest messages from mex-moos
     mailbox = mexmoos('FETCH');
@@ -45,7 +46,8 @@ while true
 %     SLAM
         
 %     ROUTE PLANNING
+      [carrot, nodes] = RRTStar(target_location, state_vector);
 
 %     MOVE
-
+      TurnDriveTurn(config, state_vector, carrot)
 end
