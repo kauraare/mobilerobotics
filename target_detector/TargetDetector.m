@@ -9,7 +9,7 @@ function target_location = TargetDetector(config, stereo_images)
 %   stereo_images - raw image input from the cameras.
 %
 % OUTPUTS:
-%   target_location - location of the target as a range and bearing
+%   target_location - location of the target as a range and bearing (rad)
 %   relative to the robot.
 
 
@@ -28,4 +28,14 @@ right_coord = FindTarget(undistorted_stereo_images.right.rgb);
 % Do some geometry.
 depth_estimate = focal_length * baseline / (left_coord(1) ...
                                             - right_coord(1));
-an
+
+range_est_left = sqrt(depth_estimate^2 + left_coord(1)^2);
+range_est_right = sqrt(depth_estimate^2 + right_coord(1)^2);
+range_estimate = (range_est_left + range_est_right) / 2;
+                                        
+angle_est_left = atan(left_coord(1)/depth_estimate);
+angle_est_right = atan(right_coord(1)/depth_estimate);
+angle_estimate = (angle_est_left + angle_est_right) / 2;
+
+
+target_location = [range_estimate, angle_estimate];

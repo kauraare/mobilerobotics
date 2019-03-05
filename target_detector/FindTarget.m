@@ -17,8 +17,8 @@ target_index(2) = mean(y(red_scaled>=threshold));
 target_coord(1) = target_index(1) - sz(2)/2;
 target_coord(2) = sz(1)/2 - target_index(2);
 
-% imshow(uint8(red_scaled))
-% h = gca;
-% h.Visible = 'On';
+imshow(uint8(red_scaled))
+h = gca;
+h.Visible = 'On';
 end
 
