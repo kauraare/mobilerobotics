@@ -20,6 +20,7 @@ pause(1.0); % give mexmoos a chance to connect (important!)
 % First tell it not to move at all
 SendSpeedCommand(0, 0, husky_config.control_channel)
 
+
 i = 0;
 velocity = 0.3;
 

@@ -19,7 +19,7 @@ pause(4.0); % give mexmoos a chance to connect (important!)
 
 % First tell it not to move at all
 SendSpeedCommand(0, 0, husky_config.control_channel)
-
+found_target_flag = 0;
 while true
     % Fetch latest messages from mex-moos
     mailbox = mexmoos('FETCH');
@@ -29,8 +29,23 @@ while true
                                       config.wheel_odometry_channel, ...
                                       true);
     disp(wheel_odometry)
+
     
+%     TARGET DETECTION
     target_location = TargetDetector(config, stereo_images);
+    if isnan(target_location) == 0
+%         update the map's target location
+        
+    end
     
     
-    
+%     POLE DETECTION
+      [ranges, bearings] = DetectPoles(scan);
+
+%     SLAM
+        
+%     ROUTE PLANNING
+
+%     MOVE
+
+end
