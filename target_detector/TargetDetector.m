@@ -26,4 +26,6 @@ left_coord = FindTarget(undistorted_stereo_images.left.rgb);
 right_coord = FindTarget(undistorted_stereo_images.right.rgb);
 
 % Do some geometry.
-depth_estimate = focal_length * baseline / (left_coord(1) - right_coord(1));
+depth_estimate = focal_length * baseline / (left_coord(1) ...
+                                            - right_coord(1));
+an
