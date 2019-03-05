@@ -1,4 +1,7 @@
-function [x,y] = DetectPoles(scan)
+function [ranges, angles] = DetectPoles(scan)
+%   call by using [xs,ys] = DetectPoles(scan)
+%   takes in scan and returns the ranges and angles to the poles detected
+%   as two arrays
     sorted=sort(scan.reflectances,'descend');
     threshold = sorted(50)+500;
     [~,locs] = findpeaks(scan.reflectances, 'MinPeakHeight',threshold);
@@ -7,7 +10,5 @@ function [x,y] = DetectPoles(scan)
     
     ranges = scan.ranges(locs)';
     angles = angles(locs);
-   
-    x = ranges .* sind(angles);
-    y = ranges .* cosd(angles);
+
 end

@@ -4,7 +4,7 @@ function [x_new, P_new] = SLAMUpdate(u, z_raw, x, P)
 % x - state vector
 % P - covariance matrix for 'x'
 % u - relative vehicle motion estimate
-% state vector - (x , y , theta, poles)  N.B. HAVE TO PROCESS TARGET SEPARATELY
+% 
 % TODO: actually, need to run this even if we detect no poles; just run
 % prediction?
 if ~isempty(z_raw)
