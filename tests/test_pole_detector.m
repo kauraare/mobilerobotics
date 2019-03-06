@@ -48,6 +48,10 @@ while true
           scatter(state_vector(i),state_vector(i+1));
           hold on
       end
-break
-     
+      
+%     plot own position
+      scatter(state_vector(1),state_vector(2),[],'r')
+      
+      axis([0 4 2 6])
+     break
 end 
