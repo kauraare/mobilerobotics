@@ -4,7 +4,7 @@ angle_threshold = pi/12;
 range_threshold = 0.25;
 
 carrot(3) = atan(carrot(2) / carrot(1));
-local_carrot = Global2Local(state_vector(1:3)', carrot');
+local_carrot = Global2Local(state_vector(1:3), carrot');
 
 angular_vel = pi/18; % rad/sec
 vel = 0.1; % m/s
@@ -15,8 +15,8 @@ vel = 0.1; % m/s
 % time_turn = angular_vel / delta_angle;
 % time_drive = delta_x / vel;
 
-GetWheelOdometry(mailbox, config.wheel_odometry_channel, true);
-last_source_timestamp = wheel_odometry.source_timestamp;
+% GetWheelOdometry(mailbox, config.wheel_odometry_channel, true);
+% last_source_timestamp = wheel_odometry.source_timestamp;
 tab = [0; 0; 0];
 delta_angle = local_carrot(3) - tab(3);
 delta_range = sqrt(local_carrot(1)^2 + local_carrot(2)^2) ...
@@ -35,11 +35,11 @@ while true
 %     end
     
     if delta_angle > angle_threshold
-        print('Turning')
+        'Turning'
         SendSpeedCommand(0, angular_vel, husky_config.control_channel);
         pause(0.01);
     elseif delta_range > range_threshold
-        print('Driving')
+        'Driving'
         SendSpeedCommand(vel, 0, husky_config.control_channel);
         pause(0.01);
     else

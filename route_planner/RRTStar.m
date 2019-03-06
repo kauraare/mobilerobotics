@@ -44,7 +44,7 @@ q_start.parent = 0;
 target_coord(1) = target_location(1) * cos(target_location(2));
 target_coord(2) = target_location(1) * sin(target_location(2));
 target_coord(3) = target_location(2);
-q_goal.coord = Local2Global(state_vector(1:3)', target_coord')';
+q_goal.coord = Local2Global(state_vector(1:3), target_coord')';
 q_goal.coord = q_goal.coord(1:2);
 q_goal.cost = 0;
 

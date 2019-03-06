@@ -12,7 +12,6 @@ mexmoos('init', 'SERVERHOST', config.host, 'MOOSNAME', client);
 mexmoos('REGISTER', config.laser_channel, 0.0);
 mexmoos('REGISTER', config.stereo_channel, 0.0);
 mexmoos('REGISTER', config.wheel_odometry_channel, 0.0);
-
 mexmoos('init', 'SERVERHOST', config.host, 'MOOSNAME', client, 'SERVERPORT','9000');
 pause(4.0); % give mexmoos a chance to connect (important!)
 
@@ -28,15 +27,15 @@ plan_flag = 1;
 target_location = Local2Global([0;0;0],[3;0;0]);  
 while true
     % Fetch latest messages from mex-moos
+    pause(0.01)
     mailbox = mexmoos('FETCH');
     scan = GetLaserScans(mailbox, config.laser_channel, true);
     stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
-    wheel_odometry = GetWheelOdometry(mailbox, ...
-                                      config.wheel_odometry_channel, ...
-                                      true);
-    disp(wheel_odometry)
+    wheel_odometry_all = GetWheelOdometry(mailbox, ...
+                                          config.wheel_odometry_channel, ...
+                                          false);
+    wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
 
-    
 %   TARGET DETECTION
 	found_target = TargetDetector(config, stereo_images);
 %     if we have found a target update the target location!
@@ -55,17 +54,8 @@ while true
 	[ranges, bearings] = DetectPoles(scan);
 
 %   SLAM
-    start_timestamp = wheel_odometry.source_timestamp;
-    last_source_timestamp = start_timestamp;
-    tab = [0; 0; 0];
-    while wheel.odometry.source_timestamp - start_timestamp < accum_time
-        if wheel_odometry.source_timestamp ~= last_source_timestamp
-            tbc = [wheel_odometry.x; wheel_odometry.y; wheel_odometry.yaw];
-            tab = tcomp(tab,tbc);
-            wheel_odometry.source_timestamp = last_source_timestamp;
-        end
-    end
-    [state_vector, state_cov] = SLAMUpdate(tab, [ranges, bearings], ...
+    [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
+                                           [ranges, bearings], ...
                                            state_vector, state_cov);
         
 %   ROUTE PLANNING
