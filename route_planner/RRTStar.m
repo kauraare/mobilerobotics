@@ -26,9 +26,9 @@ function carrots = RRTStar(target_location, state_vector)
 
 % state_vector = [500, 500, 0, 500, 200, 600, 400];
 % target_location = [500, pi/4];
-plot = 0;
-x_max = 1000;
-y_max = 1000;
+plot = 1;
+x_max = 8;
+y_max = 8;
 EPS = 20;
 numNodes = 1000;
 % For BoundPoles
