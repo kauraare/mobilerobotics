@@ -1,6 +1,5 @@
 startup_cdt
 
-%% Clear any previous connections to MOOS
 clear mexmoos;
 
 husky_id = 4; % Modify for your Husky
@@ -21,6 +20,11 @@ pause(4.0); % give mexmoos a chance to connect (important!)
 SendSpeedCommand(0, 0, config.control_channel)
 found_target_flag = 0;
 counter = 1;
+state_vector = [1; 4; 0];
+state_cov = ones(3,3);
+accum_time = 1e5;
+req_new_carrot = 1;
+plan_flag = 1;
 while true
     % Fetch latest messages from mex-moos
     mailbox = mexmoos('FETCH');
@@ -32,22 +36,47 @@ while true
     disp(wheel_odometry)
 
     
-%     TARGET DETECTION
-    target_location = TargetDetector(config, stereo_images);
+%   TARGET DETECTION
+	target_location = TargetDetector(config, stereo_images);
     if isnan(target_location) == 0
 %         update the map's target location
         
     end
     
     
-%     POLE DETECTION
-      [ranges, bearings] = DetectPoles(scan);
+%   POLE DETECTION
+	[ranges, bearings] = DetectPoles(scan);
 
-%     SLAM
+%   SLAM
+    start_timestamp = wheel_odometry.source_timestamp;
+    last_source_timestamp = start_timestamp;
+    tab = [0; 0; 0];
+    while wheel.odometry.source_timestamp - start_timestamp < accum_time
+        if wheel_odometry.source_timestamp ~= last_source_timestamp
+            tbc = [wheel_odometry.x; wheel_odometry.y; wheel_odometry.yaw];
+            tab = tcomp(tab,tbc);
+            wheel_odometry.source_timestamp = last_source_timestamp;
+        end
+    end
+    [state_vector, state_cov] = SLAMUpdate(tab, [ranges, bearings], ...
+                                           state_vector, state_cov);
         
-%     ROUTE PLANNING
-      [carrot, nodes] = RRTStar(target_location, state_vector);
+%   ROUTE PLANNING
+    if mod(counter, 100)
+        plan_flag = 1;
+    end
+    if req_new_carrot && plan_flag
+        carrots = RRTStar(target_location, state_vector);
+        carrot = carrots(end,:);
+        carrot_num = 1;
+        plan_flag = 0;
+    elseif req_new_carrot
+        carrot = carrots(end-carrot_num,:);
+        carrot_num = carrot_num + 1;
+    end
 
-%     MOVE
-      TurnDriveTurn(config, state_vector, carrot)
+%   MOVE
+    req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
+    
+    counter = counter + 1;
 end

@@ -22,7 +22,7 @@
 % 7. Add q_new to node list.
 % 8. Continue until maximum number of nodes is reached or goal is hit.
 
-function [carrot, nodes] = RRTStar(target_location, state_vector)
+function carrots = RRTStar(target_location, state_vector)
 
 % state_vector = [500, 500, 0, 500, 200, 600, 400];
 % target_location = [500, pi/4];
@@ -139,12 +139,13 @@ q_final = nodes(idx);
 q_goal.parent = idx;
 q_end = q_goal;
 nodes = [nodes q_goal];
+carrots = [q_goal.coord];
 while q_end.parent ~= 0
     % Potentially store path if route planner too slow.
     start = q_end.parent;
     line([q_end.coord(1), nodes(start).coord(1)], [q_end.coord(2), nodes(start).coord(2)], 'Color', 'r', 'LineWidth', 2);
     hold on
-    carrot = q_end;
+    carrots = [carrots; q_end.coord];
     q_end = nodes(start);
 end
 
