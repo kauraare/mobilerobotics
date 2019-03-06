@@ -26,11 +26,11 @@ function carrots = RRTStar(target_location, state_vector)
 
 % state_vector = [500, 500, 0, 500, 200, 600, 400];
 % target_location = [500, pi/4];
-
-x_max = 8;
-y_max = 8;
+plot = 0;
+x_max = 1000;
+y_max = 1000;
 EPS = 20;
-numNodes = 100;
+numNodes = 1000;
 % For BoundPoles
 width = 0.25;
 height = 0.25;
@@ -44,7 +44,8 @@ q_start.parent = 0;
 target_coord(1) = target_location(1) * cos(target_location(2));
 target_coord(2) = target_location(1) * sin(target_location(2));
 target_coord(3) = target_location(2);
-q_goal.coord = Local2Global(state_vector(1:3)', target_coord');
+q_goal.coord = Local2Global(state_vector(1:3)', target_coord')';
+q_goal.coord = q_goal.coord(1:2);
 q_goal.cost = 0;
 
 nodes(1) = q_start;
@@ -56,12 +57,17 @@ for i = 1:1:sz(1)
     rectangle('Position',obstacle(i,:),'FaceColor',[0 .5 .5])
     hold on
 end
+
+if plot
 plot(q_goal.coord(1), q_goal.coord(2), 'ob')
 hold on
-
+end
 for i = 1:1:numNodes
+    
     q_rand = [floor(rand(1)*x_max) floor(rand(1)*y_max)];
-    plot(q_rand(1), q_rand(2), 'x', 'Color',  [0 0.4470 0.7410])
+    if plot
+        plot(q_rand(1), q_rand(2), 'x', 'Color',  [0 0.4470 0.7410])
+    end
     
     % Break if goal node is already reached
     for j = 1:1:length(nodes)
@@ -82,9 +88,11 @@ for i = 1:1:numNodes
     
     q_new.coord = steer(q_rand, q_near.coord, val, EPS);
     if noCollision(q_rand, q_near.coord, obstacle)
+        if plot
         line([q_near.coord(1), q_new.coord(1)], [q_near.coord(2), q_new.coord(2)], 'Color', 'k', 'LineWidth', 2);
         drawnow
         hold on
+        end
         q_new.cost = dist(q_new.coord, q_near.coord) + q_near.cost;
         
         % Within a radius of r, find all existing nodes
