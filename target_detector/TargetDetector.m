@@ -1,4 +1,4 @@
-function target_location = TargetDetector(config, stereo_images)
+function target_location = TargetDetector(config, undistorted_stereo_images)
 %
 % target_location = TargetDetector(config, stereo_images)
 %
@@ -14,8 +14,8 @@ function target_location = TargetDetector(config, stereo_images)
 
 
 % Undistort the images.
-undistorted_stereo_images = UndistortStereoImage(stereo_images, ...
-                                                 config.camera_model);
+%undistorted_stereo_images = UndistortStereoImage(stereo_images, ...
+                                                 %config.camera_model);
 
 % Find the target in each image.
 %left_brightness = sqrt(sum(left_img, 3));
