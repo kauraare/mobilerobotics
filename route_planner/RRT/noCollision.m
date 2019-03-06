@@ -2,6 +2,9 @@ function nc = noCollision(n2, n1, o)
     A = [n1(1) n1(2)];
     B = [n2(1) n2(2)];
     sz = size(o);
+    if sz(1) == 0
+        nc = 0;
+    end
     for i = 1:1:sz(1)
         obs = [o(i,1) o(i,2) o(i,1)+o(i,3) o(i,2)+o(i,4)];
 

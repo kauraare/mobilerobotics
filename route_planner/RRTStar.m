@@ -26,7 +26,7 @@ function carrots = RRTStar(target_location, state_vector)
 
 % state_vector = [500, 500, 0, 500, 200, 600, 400];
 % target_location = [500, pi/4];
-plot = 1;
+plot = 0;
 x_max = 8;
 y_max = 8;
 EPS = 20;
@@ -44,7 +44,7 @@ q_start.parent = 0;
 target_coord(1) = target_location(1) * cos(target_location(2));
 target_coord(2) = target_location(1) * sin(target_location(2));
 target_coord(3) = target_location(2);
-q_goal.coord = Local2Global(state_vector(1:3)', target_coord')';
+q_goal.coord = Local2Global(state_vector(1:3), target_coord')';
 q_goal.coord = q_goal.coord(1:2);
 q_goal.cost = 0;
 

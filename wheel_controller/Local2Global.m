@@ -1,4 +1,6 @@
 function target_global = Local2Global(robot_global, target_local)
+% robot global is of form [x, y, theta]'
+% target global is of form [x, y, theta]'
     angle = target_local(3) + robot_global(3);
     x = -robot_global(3);
     R = [cos(x), -sin(x); sin(x) cos(x)];
