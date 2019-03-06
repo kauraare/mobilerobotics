@@ -25,6 +25,7 @@ state_cov = ones(3,3);
 accum_time = 1e5;
 req_new_carrot = 1;
 plan_flag = 1;
+target_location = Local2Global([0;0;0],[3;0;0]);  
 while true
     % Fetch latest messages from mex-moos
     mailbox = mexmoos('FETCH');
@@ -37,12 +38,18 @@ while true
 
     
 %   TARGET DETECTION
-	target_location = TargetDetector(config, stereo_images);
-    if isnan(target_location) == 0
-%         update the map's target location
-        
+	found_target = TargetDetector(config, stereo_images);
+%     if we have found a target update the target location!
+    if ~(isnan(found_target) == 0)
+%         Do we need tl_o convert target location into global frame?
+        disp("~ FOUND THE TARGET AT ~")
+        found_target 
+        local_target(1) = found_target(1) * cos(found_target(2));
+        local_target(2) = found_target(1) * sin(found_target(2));
+        local_target(3) = found_target(2);
+        target_location = Local2Global(state_vector(1:3)',local_target');
     end
-    
+   
     
 %   POLE DETECTION
 	[ranges, bearings] = DetectPoles(scan);
@@ -65,6 +72,7 @@ while true
     if mod(counter, 100)
         plan_flag = 1;
     end
+    
     if req_new_carrot && plan_flag
         carrots = RRTStar(target_location, state_vector);
         carrot = carrots(end,:);
