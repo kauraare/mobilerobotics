@@ -32,9 +32,12 @@ while true
      
      else
         "Testing Robot in Offline mode"
-        scan = load("data/pole_data/737488.5783_scan.mat");
-        scan = scan.scan
-        stereo_images = load("data/pole_data/737488.5783_images.mat");
+        image_number = string(5874);
+        scan_path = "data/pole_data/737488."+ image_number +"_scan.mat";
+        image_path = "data/pole_data/737488."+image_number+"_images.mat";
+        scan = load(scan_path);
+        scan = scan.scan;
+        stereo_images = load(image_path);
      end
      
 %      get ranges and angles of the poles
@@ -42,7 +45,6 @@ while true
      
 %      now pass these ranges and angles to SLAM
       [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges', angles'], state_vector', covariance_matrix)
-      axis([0 4 2 6])
       
       %     plot own position
       scatter(state_vector(1),state_vector(2),[],'g')
@@ -50,11 +52,14 @@ while true
 %       plot map showing detected poles in a 2d map
 
       for i = 4:2:size(state_vector)
-          scatter(state_vector(i),state_vector(i+1));
+          scatter(state_vector(i),state_vector(i+1),[],'r');
           hold on
       end
       
-
+     axis([-5 5 0 8])
+     figure(2)
+     
+     imshow(stereo_images.undistorted_stereo_images.left.rgb)
       
      break
 end 
