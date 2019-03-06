@@ -22,7 +22,7 @@ mexmoos('init', 'SERVERHOST', config.host, 'MOOSNAME', client, 'SERVERPORT','900
 pause(4.0); % give mexmoos a chance to connect (important!)
 
 % initialise state and covariance vector
-state_vector = [4 0 0];
+state_vector = [0 4 0];
 covariance_matrix = eye(3);
 while true
      if online
@@ -48,6 +48,10 @@ while true
           scatter(state_vector(i),state_vector(i+1));
           hold on
       end
-break
+      
+%     plot own position
+      scatter(state_vector(1),state_vector(2),'Colour
+      
+      axis([0 4 2 6])
      
 end 

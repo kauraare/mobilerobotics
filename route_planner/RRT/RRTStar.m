@@ -29,7 +29,7 @@ x_max = 1000;
 y_max = 1000;
 obstacle = [500,150,200,200];
 EPS = 20;
-numNodes = 3000;        
+numNodes = 100;        
 
 q_start.coord = [0 0];
 q_start.cost = 0;
