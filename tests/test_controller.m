@@ -29,7 +29,7 @@ target_location = Local2Global([0;0;0],[3;0;0]);
 
 % the route we want to take
 trajectories = zeros(3,2,3);
-trajectories(:,:,1) = [[0,6];[1,5];[0,5]];
+trajectories(:,:,1) = [[0,6];[1,5];[1,5]];
 trajectories(:,:,2) = [[0,6];[1,5];[0,5]];
 trajectories(:,:,3) = [[0,6];[1,5];[0,5]];
 traj_counter = 1;
@@ -45,9 +45,13 @@ while true
                                           false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     
-    if mod(counter, 100)
-        plan_flag = 1;
-    end
+    [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
+        [5; 0], ...
+        state_vector, state_cov);
+    
+%     if mod(counter, 1e6)
+%         plan_flag = 1;
+%     end
     
     if req_new_carrot && plan_flag
         carrots = trajectories(:,:,traj_counter);
@@ -56,12 +60,20 @@ while true
         plan_flag = 0;
         traj_counter = traj_counter + 1;
     elseif req_new_carrot
-        carrot = carrots(end-carrot_num,:);
-        carrot_num = carrot_num + 1;
+        if carrot_num == size(carrots, 1)
+            plan_flag = 1;
+        else
+            carrot = carrots(end-carrot_num,:);
+            carrot_num = carrot_num + 1;
+        end
     end
+    req_new_carrot = 0;
     
     %   MOVE
     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
+    
+    carrot
+    state_vector(1:3)'
     
     counter = counter + 1;
     
