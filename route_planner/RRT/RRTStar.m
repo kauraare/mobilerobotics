@@ -34,7 +34,7 @@ numNodes = 100;
 q_start.coord = [0 0];
 q_start.cost = 0;
 q_start.parent = 0;
-q_goal.coord = [999 999];
+q_goal.coord = [800 800];
 q_goal.cost = 0;
 
 nodes(1) = q_start;
