@@ -39,10 +39,8 @@ while true
      end
      
      % test target_detectors
-     target_location = TargetDetector(config, undistorted_stereo_images);
+     target_location = TargetDetector(config, undistorted_stereo_images)
      target_location
-     figure(2)
-     imshow(undistorted_stereo_images.left.rgb)
     
 break
      

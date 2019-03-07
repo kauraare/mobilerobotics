@@ -12,5 +12,5 @@ function [ranges, angles] = DetectPoles(scan)
     angles = angles(locs);
 %     convert to radians and correct so straight ahead is given a bearing
 %     of zero
-    angles = angles*pi/180 - pi
+    angles = -(angles*pi/180 - pi);
 end
