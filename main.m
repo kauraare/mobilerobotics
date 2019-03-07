@@ -45,13 +45,8 @@ while true
         disp("~ FOUND THE TARGET AT ~")
         disp(found_target)
         
-        % Convert to global
-        local_target(1) = found_target(1) * cos(found_target(2));
-        local_target(2) = found_target(1) * sin(found_target(2));
-        local_target(3) = found_target(2);
-        
         % Append array
-        target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',local_target');
+        target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',found_target);
         
         % Find moving average
         weights = exp(linspace(0, -counter/decay, counter+1));

@@ -25,17 +25,17 @@ covariance_matrix = eye(3);
 for time =1:simulation_time_steps
     clf
     detections = []
-%     draw current position and field of view
+    %     draw current position and field of view
     viscircles([current_x, current_y],0.5,'Color','r');
     hold on
     line([current_x,current_x+view_range*sin(current_bearing)], [current_y, current_y+view_range*cos(current_bearing)], 'Color', 'r');
     line([current_x,current_x+view_range*sin(current_bearing+field_of_view)],[current_y, current_y+view_range*cos(current_bearing+field_of_view)], 'Color', 'r');
     line([current_x,current_x+view_range*sin(current_bearing-field_of_view)],[current_y, current_y+view_range*cos(current_bearing-field_of_view)], 'Color', 'r');
-%     draw target
+    %     draw target
     viscircles([target_x, target_y],0.5,'Color','g');
     hold on
     
-%     plot poles 
+    %     plot poles
     scatter(poles_positions(:,1), poles_positions(:,2))
     % simulated dectector, returns poles within the field of view
     relative_poles_positions = zeros(size(poles_positions));
@@ -50,7 +50,7 @@ for time =1:simulation_time_steps
     [state_vector, covariance_matrix] = SLAMUpdate(MOTION, detections', state_vector,covariance_matrix);
     
     
-%     draw detected poles
+    %     draw detected poles
     for i = 4:2:size(state_vector)
         i
         rectangle('Position',[state_vector(i) state_vector(i+1) pole_width pole_height],'FaceColor','r')
@@ -62,10 +62,10 @@ for time =1:simulation_time_steps
     target_bearing = atan((target_x-current_x)/(target_y--current_y))+current_bearing;
     carrots = RRTStar([target_range,target_bearing], state_vector');
     
-%     plot(carrot.coord(1), carrot.coord(2), 'x', 'Color',  'r')
-%     RRTStar(target_location 
-
-%     move to the next carrot
+    %     plot(carrot.coord(1), carrot.coord(2), 'x', 'Color',  'r')
+    %     RRTStar(target_location
+    
+    %     move to the next carrot
     current_x = carrots(end,1)
     current_y = carrots(end,2)
     

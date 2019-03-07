@@ -1,4 +1,4 @@
-function target_global = Local2Global(robot_global, target_local)
+function target_global = LocalCartesian2Global(robot_global, target_local)
 % robot global is of form [x, y, theta]'
 % target global is of form [x, y, theta]'
     angle = target_local(3) + robot_global(3);

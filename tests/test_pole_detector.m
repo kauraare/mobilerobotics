@@ -17,7 +17,7 @@ if online == 1
     mexmoos('REGISTER', config.laser_channel, 0.0);
     mexmoos('REGISTER', config.stereo_channel, 0.0);
     mexmoos('REGISTER', config.wheel_odometry_channel, 0.0);
-
+    
     mexmoos('init', 'SERVERHOST', config.host, 'MOOSNAME', client, 'SERVERPORT','9000');
     pause(4.0); % give mexmoos a chance to connect (important!)
 end
@@ -25,13 +25,13 @@ end
 state_vector = [0 4 0];
 covariance_matrix = eye(3);
 while true
-     if online
+    if online
         "Testing Robot in Online Model"
         mailbox = mexmoos('FETCH');
-     	scan = GetLaserScans(mailbox, config.laser_channel, true);
+        scan = GetLaserScans(mailbox, config.laser_channel, true);
         stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
-     
-     else
+        
+    else
         "Testing Robot in Offline mode"
         image_number = string(4396);
         scan_path = "data/sunbeams/737491."+ image_number +"_scan.mat";
@@ -39,39 +39,39 @@ while true
         scan = load(scan_path);
         scan = scan.scan;
         stereo_images = load(image_path);
-     end
-     
-%      get ranges and angles of the poles
-       [ranges, angles] = DetectPoles(scan)
-       
-      
-%      now pass these ranges and angles to SLAM
-      [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges;angles], state_vector', covariance_matrix)
-      
-      %     plot own position
-      figure
-      scatter(state_vector(1),state_vector(2),[],'g')
-      hold on 
-%       plot map showing detected poles in a 2d map
-
-      for i = 4:2:size(state_vector)
-          scatter(state_vector(i),state_vector(i+1),[],'r');
-          hold on
-      end
-      
-     axis([-5 5 0 8])
-     figure(2)
-
-     if online
-         imshow(stereo_images.left.rgb)
-     else
-         imshow(stereo_images.undistorted_stereo_images.left.rgb)
-     end
-     
-%      figure
-%      subplot(2,1,1)
-%      plot(scan.reflectances)
-%      subplot(2,1,2)
-%      plot(scan.ranges)
-     break
-end 
+    end
+    
+    %      get ranges and angles of the poles
+    [ranges, angles] = DetectPoles(scan)
+    
+    
+    %      now pass these ranges and angles to SLAM
+    [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges;angles], state_vector', covariance_matrix)
+    
+    %     plot own position
+    figure
+    scatter(state_vector(1),state_vector(2),[],'g')
+    hold on
+    %       plot map showing detected poles in a 2d map
+    
+    for i = 4:2:size(state_vector)
+        scatter(state_vector(i),state_vector(i+1),[],'r');
+        hold on
+    end
+    
+    axis([-5 5 0 8])
+    figure(2)
+    
+    if online
+        imshow(stereo_images.left.rgb)
+    else
+        imshow(stereo_images.undistorted_stereo_images.left.rgb)
+    end
+    
+    %      figure
+    %      subplot(2,1,1)
+    %      plot(scan.reflectances)
+    %      subplot(2,1,2)
+    %      plot(scan.ranges)
+    break
+end

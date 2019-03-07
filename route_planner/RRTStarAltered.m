@@ -1,11 +1,11 @@
 % RRT* algorithm in 2D with collision avoidance.
-% 
+%
 % Author: Sai Vemprala
-% 
+%
 % nodes:    Contains list of all explored nodes. Each node contains its
 %           coordinates, cost to reach and its parent.
-% 
-% Brief description of algorithm: 
+%
+% Brief description of algorithm:
 % 1. Pick a random node q_rand.
 % 2. Find the closest node q_near from explored nodes to branch out from, towards
 %    q_rand.
@@ -13,11 +13,11 @@
 %    q_new. Check that obstacle is not hit.
 % 4. Update cost of reaching q_new from q_near, treat it as Cmin. For now,
 %    q_near acts as the parent node of q_new.
-% 5. From the list of 'visited' nodes, check for nearest neighbors with a 
+% 5. From the list of 'visited' nodes, check for nearest neighbors with a
 %    given radius, insert in a list q_nearest.
 % 6. In all members of q_nearest, check if q_new can be reached from a
 %    different parent node with cost lower than Cmin, and without colliding
-%    with the obstacle. Select the node that results in the least cost and 
+%    with the obstacle. Select the node that results in the least cost and
 %    update the parent of q_new.
 % 7. Add q_new to node list.
 % 8. Continue until maximum number of nodes is reached or goal is hit.
@@ -82,8 +82,8 @@ for i = 1:1:numNodes
     
     q_new.coord = steer(q_rand, q_near.coord, val, EPS);
     if noCollision(q_rand, q_near.coord, obstacle)
-%         line([q_near.coord(1), q_new.coord(1)], [q_near.coord(2), q_new.coord(2)], 'Color', 'k', 'LineWidth', 2);
-%         drawnow
+        %         line([q_near.coord(1), q_new.coord(1)], [q_near.coord(2), q_new.coord(2)], 'Color', 'k', 'LineWidth', 2);
+        %         drawnow
         
         q_new.cost = dist(q_new.coord, q_near.coord) + q_near.cost;
         
@@ -110,7 +110,7 @@ for i = 1:1:numNodes
             if noCollision(q_nearest(k).coord, q_new.coord, obstacle) && q_nearest(k).cost + dist(q_nearest(k).coord, q_new.coord) < C_min
                 q_min = q_nearest(k);
                 C_min = q_nearest(k).cost + dist(q_nearest(k).coord, q_new.coord);
-%                 line([q_min.coord(1), q_new.coord(1)], [q_min.coord(2), q_new.coord(2)], 'Color', 'g');                
+                %                 line([q_min.coord(1), q_new.coord(1)], [q_min.coord(2), q_new.coord(2)], 'Color', 'g');
                 
             end
         end
@@ -142,8 +142,8 @@ nodes = [nodes q_goal];
 while q_end.parent ~= 0
     % Potentially store path if route planner too slow.
     start = q_end.parent;
-%     line([q_end.coord(1), nodes(start).coord(1)], [q_end.coord(2), nodes(start).coord(2)], 'Color', 'r', 'LineWidth', 2);
-%     
+    %     line([q_end.coord(1), nodes(start).coord(1)], [q_end.coord(2), nodes(start).coord(2)], 'Color', 'r', 'LineWidth', 2);
+    %
     carrot = q_end;
     q_end = nodes(start);
 end
