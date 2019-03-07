@@ -27,7 +27,7 @@ function carrots = RRTStar(target_location, state_vector)
 
 
 
-plot_flag = 1;
+plot_flag = 0;
 x_max = 8;
 y_max = 8;
 EPS = 20;
@@ -132,8 +132,10 @@ for i = 1:1:numNodes
             if noCollision(q_nearest(k).coord, q_new.coord, obstacles) && q_nearest(k).cost + dist(q_nearest(k).coord, q_new.coord) < C_min
                 q_min = q_nearest(k);
                 C_min = q_nearest(k).cost + dist(q_nearest(k).coord, q_new.coord);
-                line([q_min.coord(1), q_new.coord(1)], [q_min.coord(2), q_new.coord(2)], 'Color', 'g');                
-                hold on
+                if plot_flag
+                    line([q_min.coord(1), q_new.coord(1)], [q_min.coord(2), q_new.coord(2)], 'Color', 'g');                
+                    hold on
+                end
             end
         end
         
@@ -165,8 +167,10 @@ carrots = [q_goal.coord];
 while q_end.parent ~= 0
     % Potentially store path if route planner too slow.
     start = q_end.parent;
+
     line([q_end.coord(1), nodes(start).coord(1)], [q_end.coord(2), nodes(start).coord(2)], 'Color', 'r', 'LineWidth', 2);
     hold on
+
     carrots = [carrots; q_end.coord];
     carrots =  carrots(end:-1:1,:);
     q_end = nodes(start);
