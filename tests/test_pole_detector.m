@@ -27,14 +27,15 @@ covariance_matrix = eye(3);
 while true
      if online
         "Testing Robot in Online Model"
+        mailbox = mexmoos('FETCH');
      	scan = GetLaserScans(mailbox, config.laser_channel, true);
         stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
      
      else
         "Testing Robot in Offline mode"
-        image_number = string(5877);
-        scan_path = "data/pole_data/737488."+ image_number +"_scan.mat";
-        image_path = "data/pole_data/737488."+image_number+"_images.mat";
+        image_number = string(4396);
+        scan_path = "data/737491."+ image_number +"_scan.mat";
+        image_path = "data/737491."+image_number+"_images.mat";
         scan = load(scan_path);
         scan = scan.scan;
         stereo_images = load(image_path);
@@ -48,6 +49,7 @@ while true
       [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges;angles], state_vector', covariance_matrix)
       
       %     plot own position
+      figure
       scatter(state_vector(1),state_vector(2),[],'g')
       hold on 
 %       plot map showing detected poles in a 2d map
@@ -60,7 +62,16 @@ while true
      axis([-5 5 0 8])
      figure(2)
      
-     imshow(stereo_images.undistorted_stereo_images.left.rgb)
-      
+     if online
+         imshow(stereo_images.left.rgb)
+     else
+         imshow(stereo_images.undistorted_stereo_images.left.rgb)
+     end
+     
+     figure
+     subplot(2,1,1)
+     plot(scan.reflectances)
+     subplot(2,1,2)
+     plot(scan.ranges)
      break
 end 
