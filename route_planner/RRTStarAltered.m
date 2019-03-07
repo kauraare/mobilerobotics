@@ -22,7 +22,7 @@
 % 7. Add q_new to node list.
 % 8. Continue until maximum number of nodes is reached or goal is hit.
 
-function [carrot, nodes,route] = RRTStar(target_location, state_vector)
+function [carrot, nodes,route] = RRTStarAltered(target_location, state_vector)
 
 % state_vector = [500, 500, 0, 500, 200, 600, 400];
 % target_location = [500, pi/4];
@@ -148,4 +148,5 @@ while q_end.parent ~= 0
     q_end = nodes(start);
 end
 
+route = 5;
 end
