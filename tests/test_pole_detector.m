@@ -32,7 +32,7 @@ while true
      
      else
         "Testing Robot in Offline mode"
-        image_number = string(5874);
+        image_number = string(5877);
         scan_path = "data/pole_data/737488."+ image_number +"_scan.mat";
         image_path = "data/pole_data/737488."+image_number+"_images.mat";
         scan = load(scan_path);
@@ -41,10 +41,11 @@ while true
      end
      
 %      get ranges and angles of the poles
-     [ranges, angles] = DetectPoles(scan)
-     
+       [ranges, angles] = DetectPoles(scan)
+       
+      
 %      now pass these ranges and angles to SLAM
-      [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges', angles'], state_vector', covariance_matrix)
+      [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges;angles], state_vector', covariance_matrix)
       
       %     plot own position
       scatter(state_vector(1),state_vector(2),[],'g')
