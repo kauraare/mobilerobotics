@@ -34,8 +34,8 @@ while true
      else
         "Testing Robot in Offline mode"
         image_number = string(4396);
-        scan_path = "data/737491."+ image_number +"_scan.mat";
-        image_path = "data/737491."+image_number+"_images.mat";
+        scan_path = "data/sunbeams/737491."+ image_number +"_scan.mat";
+        image_path = "data/sunbeams/737491."+image_number+"_images.mat";
         scan = load(scan_path);
         scan = scan.scan;
         stereo_images = load(image_path);

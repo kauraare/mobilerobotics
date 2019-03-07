@@ -15,7 +15,7 @@
 %     angles = -(angles*pi/180 - pi);
 % end
 
-function [ranges, angles] = DetectPoles(scan)
+function [filtered_ranges, filtered_angles] = DetectPoles(scan)
 %   call by using [xs,ys] = DetectPoles(scan)
 %   takes in scan and returns the ranges and angles to the poles detected
 %   as two arrays
@@ -36,7 +36,18 @@ function [ranges, angles] = DetectPoles(scan)
     
     ranges = scan.ranges(locs)';
     angles = angles(locs);
+    filtered_ranges = ranges(1);
+    filtered_angles = angles(1);
+    range_nearness_threshold = 0.25;
+    angle_nearness_threshold = 15;
+    for i = 2:1:size(ranges,2)
+        if all(abs(filtered_ranges - ranges(i)) > range_nearness_threshold) || ...
+                all((filtered_angles - angles(i)) > angle_nearness_threshold)
+            filtered_ranges = [filtered_ranges, ranges(i)];
+            filtered_angles = [filtered_angles, angles(i)];
+        end
+    end
 %     convert to radians and correct so straight ahead is given a bearing
 %     of zero
-    angles = -(angles*pi/180 - pi);
+    filtered_angles = -(filtered_angles*pi/180 - pi);
 end
