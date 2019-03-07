@@ -5,6 +5,11 @@ range_threshold = 0.25;
 
 carrot(3) = atan(carrot(2) / carrot(1));
 local_carrot = Global2Local(state_vector(1:3), carrot');
+local_carrot(3) = carrot(3) - state_vector(3);
+displacement = carrot(1:2) - state_vector(1:2);
+range = sqrt(sum(displacment.^2));
+local_carrot(1) = range*cos(local_carrot(3));
+local_carrot(2) = range*sin(local_carrot(3));
 
 angular_vel = pi/6; % rad/sec
 vel = 0.1; % m/s
