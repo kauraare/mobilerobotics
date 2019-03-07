@@ -18,7 +18,8 @@ pause(4.0); % give mexmoos a chance to connect (important!)
 % First tell it not to move at all
 SendSpeedCommand(0, 0, config.control_channel)
 counter = 1;
-state_vector = [1; 4; 0];
+start_position = [1; 4; 0];
+state_vector = start_position;
 state_cov = ones(3,3);
 accum_time = 1e5;
 req_new_carrot = 1;
@@ -38,30 +39,34 @@ while true
         false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     
-    %   TARGET DETECTION
-    found_target = TargetDetector(config, stereo_images);
-    disp("~ FOUND THE TARGET AT ~")
-    disp(found_target)
-    
-    % Convert to global
-    local_target(1) = found_target(1) * cos(found_target(2));
-    local_target(2) = found_target(1) * sin(found_target(2));
-    local_target(3) = found_target(2);
-    
-    % Append array
-    target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',local_target');
-    
-    % Find moving average
-    weights = exp(linspace(0, -counter/decay, counter+1));
-    weights(any(isnan(local_target),1)) = 0; % if localtarget is nan set weight to 0
-    weights(1)=1e-100; % to ensure at least one is positive
-    weights=weights/sum(weights);
-    target_location = nansum(target_location_array.*weights,2);
-    
-    % Check if we have reached target
-    
-    if any(isnan(local_target(:,end))) & norm(target_location(1:2)-state_vector(1:2)) < target_distance_threshold
-        reached_target=true;
+    if ~reached_target
+        %   TARGET DETECTION
+        found_target = TargetDetector(config, stereo_images);
+        disp("~ FOUND THE TARGET AT ~")
+        disp(found_target)
+        
+        % Convert to global
+        local_target(1) = found_target(1) * cos(found_target(2));
+        local_target(2) = found_target(1) * sin(found_target(2));
+        local_target(3) = found_target(2);
+        
+        % Append array
+        target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',local_target');
+        
+        % Find moving average
+        weights = exp(linspace(0, -counter/decay, counter+1));
+        weights(any(isnan(local_target),1)) = 0; % if localtarget is nan set weight to 0
+        weights(1)=1e-100; % to ensure at least one is positive
+        weights=weights/sum(weights);
+        target_location = nansum(target_location_array.*weights,2);
+        
+        % Check if we have reached target
+        
+        if any(isnan(local_target(:,end))) && norm(target_location(1:2)-state_vector(1:2)) < target_distance_threshold
+            reached_target=true;
+        end
+    else
+        target_location = start_position;
     end
     
     %   POLE DETECTION
