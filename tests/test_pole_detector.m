@@ -3,7 +3,7 @@
 
 % Change this parameter to toggle between testing the robot online and
 % using prerecorded data.
-online = 0;
+online = 1;
 % Connect to robot
 clear mexmoos;
 
@@ -60,7 +60,7 @@ while true
      axis([-5 5 0 8])
      figure(2)
      
-     imshow(stereo_images.undistorted_stereo_images.left.rgb)
+     imshow(stereo_images.left.rgb)
       
      break
 end 

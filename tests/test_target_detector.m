@@ -3,7 +3,8 @@
 
 % Change this parameter to toggle between testing the robot online and
 % using prerecorded data.
-online = 0;
+close all
+online = 1;
 % Connect to robot
 clear mexmoos;
 
@@ -43,14 +44,14 @@ while true
 %      left image
      figure(1)
      subplot(1,2,1)
-     imshow(undistorted_stereo_images.left.rgb)
-     img_size = size(undistorted_stereo_images.left.rgb);
+     imshow(stereo_images.left.rgb)
+     img_size = size(stereo_images.left.rgb);
      img_x_size = img_size(2);
      img_y_size = img_size(1);
      hold on 
-     left_coords = FindTarget(undistorted_stereo_images.left.rgb);
+     left_coords = FindTarget(stereo_images.left.rgb);
      scatter(left_coords(1)+img_x_size/2, -left_coords(2)+img_y_size/2)
-     
+     undistorted_stereo_images = stereo_images
 %      right image
      subplot(1,2,2)
      imshow(undistorted_stereo_images.right.rgb)
@@ -59,7 +60,7 @@ while true
      img_size = size(undistorted_stereo_images.right.rgb);
      scatter(right_coords(1)+img_x_size/2, -right_coords(2)+img_y_size/2)
      
-     target_location = TargetDetector(config, undistorted_stereo_images);
+     target_location = TargetDetector(config, stereo_images);
      
      [state_vector, covariance_matrix] = SLAMUpdate([0,0,0]',[target_location'],state_vector',covariance_matrix);
 %      depth_estimate = 
