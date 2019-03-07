@@ -21,8 +21,10 @@ else
     target_coord(2) = sz(1)/2 - target_index(2);
 end
 
-imshow(uint8(red_scaled))
-h = gca;
-h.Visible = 'On';
+% imshow(uint8(red_scaled))
+% 
+% h = gca;
+% h.Visible = 'On';
+
 end
 

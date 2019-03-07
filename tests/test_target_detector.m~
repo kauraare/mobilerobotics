@@ -39,9 +39,15 @@ while true
      end
      
      % test target_detectors
-     target_location = TargetDetector(config, undistorted_stereo_images)
-     target_location
-    
+     target_location = TargetDetector(config, undistorted_stereo_images);
+     figure(2)
+     imshow(undistorted_stereo_images.left.rgb)
+     figure(3)
+     [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [target_location'], state_vector', covariance_matrix)
+      for i = 4:2:size(state_vector)
+          scatter(state_vector(i),state_vector(i+1),[],'r');
+          hold on
+      end
 break
      
 end 
