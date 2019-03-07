@@ -32,18 +32,47 @@ while true
         stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
      else
         "Testing Robot in Offline mode"
-        image_number = 5828;
+        image_number = 5826;
         scan = load("data/target_data/737488."+image_number+"_scan.mat");
         scan = scan.scan;
         load("data/target_data/737488."+image_number+"_images.mat");
      end
      
      % test target_detectors
-     target_location = TargetDetector(config, undistorted_stereo_images);
-     target_location
-     figure(2)
+%      left image
+     figure(1)
+     subplot(1,2,1)
      imshow(undistorted_stereo_images.left.rgb)
-    
+     img_size = size(undistorted_stereo_images.left.rgb);
+     img_x_size = img_size(2);
+     img_y_size = img_size(1);
+     hold on 
+     left_coords = FindTarget(undistorted_stereo_images.left.rgb);
+     scatter(left_coords(1)+img_x_size/2, -left_coords(2)+img_y_size/2)
+     
+%      right image
+     subplot(1,2,2)
+     imshow(undistorted_stereo_images.right.rgb)
+     hold on 
+     right_coords = FindTarget(undistorted_stereo_images.right.rgb);
+     img_size = size(undistorted_stereo_images.right.rgb);
+     scatter(right_coords(1)+img_x_size/2, -right_coords(2)+img_y_size/2)
+     
+     target_location = TargetDetector(config, undistorted_stereo_images);
+     
+     [state_vector, covariance_matrix] = SLAMUpdate([0,0,0]',[target_location'],state_vector',covariance_matrix);
+%      depth_estimate = 
+%      plot own position and the target
+     figure(2)
+     scatter(state_vector(1),state_vector(2),[],'g')
+     hold on 
+     
+     for i = 4:2:size(state_vector)
+          scatter(state_vector(i),state_vector(i+1),[],'r');
+          hold on
+     end
+      
+     axis([-5 5 3 10])
 break
      
 end 
