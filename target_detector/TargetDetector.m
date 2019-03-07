@@ -15,7 +15,7 @@ function target_location = TargetDetector(config, undistorted_stereo_images)
 
 % Undistort the images.
 %undistorted_stereo_images = UndistortStereoImage(stereo_images, ...
-                                                 %config.camera_model);
+%config.camera_model);
 
 % Find the target in each image.
 %left_brightness = sqrt(sum(left_img, 3));
@@ -27,7 +27,7 @@ right_coord = FindTarget(undistorted_stereo_images.right.rgb);
 
 % Do some geometry.
 depth_estimate = focal_length * baseline / (left_coord(1) ...
-                                            - right_coord(1));
+    - right_coord(1));
 
 % get angle
 

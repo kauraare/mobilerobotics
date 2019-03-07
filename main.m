@@ -44,7 +44,7 @@ while true
         found_target = TargetDetector(config, stereo_images);
         disp("~ FOUND THE TARGET AT ~")
         disp(found_target)
-      
+        
         % Append array
         target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',found_target);
         

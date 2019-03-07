@@ -11,7 +11,7 @@ vel = 0.1; % m/s
 
 % delta_angle = local_carrot(3);
 % delta_x = sqrt(local_carrot(1)^2 + local_carrot(2)^2);
-% 
+%
 % time_turn = angular_vel / delta_angle;
 % time_drive = delta_x / vel;
 
@@ -20,7 +20,7 @@ vel = 0.1; % m/s
 tab = [0; 0; 0];
 delta_angle = local_carrot(3) - tab(3);
 delta_range = sqrt(local_carrot(1)^2 + local_carrot(2)^2) ...
-                   - sqrt(tab(1)^2 + tab(2)^2);
+    - sqrt(tab(1)^2 + tab(2)^2);
 request_new_carrot = 0;
 
 %     wheel_odometry = GetWheelOdometry(mailbox, ...
@@ -35,9 +35,9 @@ request_new_carrot = 0;
 %     end
 
 if delta_angle > angle_threshold
-        'Turning'
-        SendSpeedCommand(0, angular_vel, husky_config.control_channel);
-        pause(0.01);
+    'Turning'
+    SendSpeedCommand(0, angular_vel, husky_config.control_channel);
+    pause(0.01);
 elseif delta_range > range_threshold
     'Driving'
     SendSpeedCommand(vel, 0, husky_config.control_channel);
@@ -47,7 +47,7 @@ else
     SendSpeedCommand(0, 0, husky_config.control_channel);
     pause(0.01);
     return
-
+    
 end
 %     last_source_timestamp = wheel_odometry.source_timestamp;
 

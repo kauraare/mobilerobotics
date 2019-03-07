@@ -24,7 +24,7 @@ state_cov = ones(3,3);
 accum_time = 1e5;
 req_new_carrot = 1;
 plan_flag = 1;
-target_location = Local2Global([0;0;0],[3;0;0]);  
+target_location = Local2Global([0;0;0],[3;0;0]);
 while true
     % Fetch latest messages from mex-moos
     pause(0.25)
@@ -32,16 +32,15 @@ while true
     scan = GetLaserScans(mailbox, config.laser_channel, true);
     stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
     wheel_odometry_all = GetWheelOdometry(mailbox, ...
-                                          config.wheel_odometry_channel, ...
-                                          false);
+        config.wheel_odometry_channel, ...
+        false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     wheel_odometry'
-%   SLAM
+    %   SLAM
     [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
-                                           [5; 0], ...
-                                           state_vector, state_cov);
+        [5; 0], ...
+        state_vector, state_cov);
     
     state_vector(1:3)'
 end
-    
-    
+

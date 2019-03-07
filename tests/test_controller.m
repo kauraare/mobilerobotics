@@ -41,8 +41,8 @@ while true
     scan = GetLaserScans(mailbox, config.laser_channel, true);
     stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
     wheel_odometry_all = GetWheelOdometry(mailbox, ...
-                                          config.wheel_odometry_channel, ...
-                                          false);
+        config.wheel_odometry_channel, ...
+        false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     
     if mod(counter, 100)
