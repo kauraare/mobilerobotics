@@ -35,11 +35,27 @@ while true
         config.wheel_odometry_channel, ...
         false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
+%     PLEASE CONSULT SAAD BEFORE CONSIDERING CHANGING THIS
+    wheel_odometry(3) = -wheel_odometry(3); % SERIOUSLY
+    [ranges, angles] = DetectPoles(scan)
+
     wheel_odometry'
     %   SLAM
     [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
-        [5; 0], ...
+        [ranges;angles], ...
         state_vector, state_cov);
+    %     plot own position
+    clf
+    scatter(state_vector(1),state_vector(2),[],'g')
+    hold on
+    %       plot map showing detected poles in a 2d map
+    
+    for i = 4:2:size(state_vector)
+        scatter(state_vector(i),state_vector(i+1),[],'r');
+        hold on
+    end
+    
+    axis([0 8 0 8])
     
     state_vector(1:3)'
 end

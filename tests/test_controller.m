@@ -29,9 +29,9 @@ target_location = Local2Global([0;0;0],[3;0;0]);
 
 % the route we want to take
 trajectories = zeros(3,2,3);
-trajectories(:,:,1) = [[0,6];[1,5];[1,5]];
-trajectories(:,:,2) = [[0,6];[1,5];[0,5]];
-trajectories(:,:,3) = [[0,6];[1,5];[0,5]];
+trajectories(:,:,1) = [[1,4];[2,5];[1,5]];
+trajectories(:,:,2) = [[1,4];[2,5];[1,5]];
+trajectories(:,:,3) = [[1,4];[2,5];[1,5]];
 traj_counter = 1;
 
 while true
@@ -45,8 +45,10 @@ while true
         false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     
+    [ranges, angles] = DetectPoles(scan);
+    
     [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
-        [5; 0], ...
+        [ranges;angles], ...
         state_vector, state_cov);
     
 %     if mod(counter, 1e6)
@@ -71,6 +73,21 @@ while true
     
     %   MOVE
     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
+    
+    
+%     plot our position
+     clf
+    scatter(state_vector(1),state_vector(2),[],'g')
+    hold on
+    
+    
+%     plot map showing detected poles in a 2d map    
+    for i = 4:2:size(state_vector)
+        scatter(state_vector(i),state_vector(i+1),[],'r');
+        hold on
+    end
+    
+    axis([0 8 0 8])
     
     carrot
     state_vector(1:3)'

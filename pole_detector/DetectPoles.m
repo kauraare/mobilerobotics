@@ -19,7 +19,7 @@ function [filtered_ranges, filtered_angles] = DetectPoles(scan)
 %   call by using [xs,ys] = DetectPoles(scan)
 %   takes in scan and returns the ranges and angles to the poles detected
 %   as two arrays
-range_thresh = 5;
+range_thresh = 3;
 scan_concat = [scan.reflectances, scan.ranges];
 scan_concat(scan_concat(:,2)>=range_thresh,1) = 0;
 %     figure
@@ -36,6 +36,12 @@ angles = linspace(scan.start_angle, scan.start_angle+scan.step_size*(length(scan
 
 ranges = scan.ranges(locs)';
 angles = angles(locs);
+% deal with no poles detected
+if isempty(ranges)
+    filtered_ranges = [];
+    filtered_angles = [];
+    return
+end
 filtered_ranges = ranges(1);
 filtered_angles = angles(1);
 range_nearness_threshold = 0.25;
@@ -49,5 +55,5 @@ for i = 2:1:size(ranges,2)
 end
 %     convert to radians and correct so straight ahead is given a bearing
 %     of zero
-filtered_angles = -(filtered_angles*pi/180 - pi);
+filtered_angles = -(filtered_angles*pi/180 - pi/2);
 end

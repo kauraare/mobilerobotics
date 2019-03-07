@@ -36,9 +36,6 @@ number_of_poles = 30
 % define variables to test
 poles = rand(1,2*number_of_poles)*x_max
 
-state_vector = [0, 4, 0, poles];
-
-target_location = [7, 7];
 
 % For BoundPoles
 width = 0.5;
