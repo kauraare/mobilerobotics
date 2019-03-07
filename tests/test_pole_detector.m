@@ -68,10 +68,10 @@ while true
          imshow(stereo_images.undistorted_stereo_images.left.rgb)
      end
      
-     figure
-     subplot(2,1,1)
-     plot(scan.reflectances)
-     subplot(2,1,2)
-     plot(scan.ranges)
+%      figure
+%      subplot(2,1,1)
+%      plot(scan.reflectances)
+%      subplot(2,1,2)
+%      plot(scan.ranges)
      break
 end 

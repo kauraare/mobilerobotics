@@ -22,11 +22,11 @@ function [filtered_ranges, filtered_angles] = DetectPoles(scan)
     range_thresh = 5;
     scan_concat = [scan.reflectances, scan.ranges];
     scan_concat(scan_concat(:,2)>=range_thresh,1) = 0;
-    figure
-    subplot(2,1,1)
-     plot(scan_concat(:,1))
-     subplot(2,1,2)
-     plot(scan_concat(:,2))
+%     figure
+%     subplot(2,1,1)
+%      plot(scan_concat(:,1))
+%      subplot(2,1,2)
+%      plot(scan_concat(:,2))
     sorted_concat=sortrows(scan_concat, 1, 'descend');
     sorted = sorted_concat(:,1);
     threshold = sorted(50)+350;

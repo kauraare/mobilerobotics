@@ -36,7 +36,7 @@ traj_counter = 1;
 
 while true
     % Fetch latest messages from mex-moos
-    pause(0.01)
+    pause(0.25)
     mailbox = mexmoos('FETCH');
     scan = GetLaserScans(mailbox, config.laser_channel, true);
     stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
@@ -50,7 +50,7 @@ while true
     end
     
     if req_new_carrot && plan_flag
-        carrots = trajectories(traj_counter);
+        carrots = trajectories(:,:,traj_counter);
         carrot = carrots(end,:);
         carrot_num = 1;
         plan_flag = 0;

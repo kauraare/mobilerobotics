@@ -27,7 +27,7 @@ plan_flag = 1;
 target_location = Local2Global([0;0;0],[3;0;0]);  
 while true
     % Fetch latest messages from mex-moos
-    pause(0.01)
+    pause(0.25)
     mailbox = mexmoos('FETCH');
     scan = GetLaserScans(mailbox, config.laser_channel, true);
     stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
@@ -35,12 +35,13 @@ while true
                                           config.wheel_odometry_channel, ...
                                           false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
+    wheel_odometry'
 %   SLAM
     [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
-                                           [], ...
+                                           [5; 0], ...
                                            state_vector, state_cov);
     
-    state_vector(1:3)
+    state_vector(1:3)'
 end
     
     
