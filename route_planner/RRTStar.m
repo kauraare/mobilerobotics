@@ -23,18 +23,18 @@
 % 8. Continue until maximum number of nodes is reached or goal is hit.
 
 
-function carrots = RRTStar(target_location, state_vector)
+function carrots = RRTStar(target_coord, state_vector)
 
 
 
-plot_flag = 0;
-x_max = 8;
-y_max = 8;
-EPS = 20;
+plot_flag = 1;
+x_max = 7;
+y_max = 3.5;
+EPS = 0.5;
 numNodes = 200;
-number_of_poles = 30
+% number_of_poles = 30
 % define variables to test
-poles = rand(1,2*number_of_poles)*x_max
+% poles = rand(1,2*number_of_poles)*x_max
 
 
 % For BoundPoles
@@ -49,20 +49,20 @@ q_start.coord = state_vector(1:2);
 q_start.cost = 0;
 q_start.parent = 0;
 
-target_coord(1) = target_location(1) * cos(target_location(2));
-target_coord(2) = target_location(1) * sin(target_location(2));
-target_coord(3) = target_location(2);
+% target_coord(1) = target_location(1) * cos(target_location(2));
+% target_coord(2) = target_location(1) * sin(target_location(2));
+% target_coord(3) = target_location(2);
 
 
-q_goal.coord = target_location;
+q_goal.coord = target_coord';
 q_goal.cost = 0;
 
 nodes(1) = q_start;
-figure(1)
-axis([0 x_max 0 y_max])
+% figure(1)
+% axis([0 x_max 0 y_max])
 % plot obstacles
 if plot_flag
-    close all
+%     close all
     sz = size(obstacles);
     for i = 1:1:sz(1)
         rectangle('Position',obstacles(i,:),'FaceColor',[0 .5 .5])
@@ -70,12 +70,12 @@ if plot_flag
     end
 end
 
-scatter(q_goal.coord(1), q_goal.coord(2), 'g')
-hold on
+% scatter(q_goal.coord(1), q_goal.coord(2), 'g')
+% hold on
 
 for i = 1:1:numNodes
     
-    q_rand = [rand(1)*x_max rand(1)*y_max];
+    q_rand = [rand(1)*8 rand(1)*7-3.5];
     if plot_flag
         plot(q_rand(1), q_rand(2), 'x', 'Color',  [0 0.4470 0.7410])
     end
@@ -108,7 +108,7 @@ for i = 1:1:numNodes
         
         % Within a radius of r, find all existing nodes
         q_nearest = [];
-        r = 60;
+        r = 1;
         neighbor_count = 1;
         for j = 1:1:length(nodes)
             if noCollision(nodes(j).coord, q_new.coord, obstacles) && dist(nodes(j).coord, q_new.coord) <= r
