@@ -28,6 +28,7 @@ covariance_matrix = eye(3);
 while true
      if online
         "Testing Robot in Online Model"
+        mailbox = mexmoos('FETCH');
      	scan = GetLaserScans(mailbox, config.laser_channel, true);
         stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
      else
