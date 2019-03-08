@@ -10,5 +10,6 @@ for i = 2:1:size(wheel_odometry, 2)
 end
 
 composed_transform = tba;
+composed_transform(3) = -composed_transform(3);
 
 end

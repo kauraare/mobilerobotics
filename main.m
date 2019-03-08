@@ -18,7 +18,7 @@ pause(4.0); % give mexmoos a chance to connect (important!)
 % First tell it not to move at all
 SendSpeedCommand(0, 0, config.control_channel)
 counter = 1;
-start_position = [1; 4; 0];
+start_position = [0, 0, 0];
 state_vector = start_position';
 state_cov = ones(3,3);
 accum_time = 1e5;
@@ -27,7 +27,7 @@ plan_flag = 1;
 decay = 5; % decay for exponential moving average for target
 target_distance_threshold = 0.3; % distance to target when to stop
 reached_target = false;
-target_location_array = Local2Global(state_vector,[3;0;0]);
+target_location_array = Local2Global(state_vector',[5 r;0;0]);
 while true
     % Fetch latest messages from mex-moos
     pause(0.01)
@@ -47,8 +47,12 @@ while true
         disp(found_target)
         
         % Append array
+        if size(state_vector,1)==1
         target_location_array(:,counter+1) = Local2Global(state_vector(1:3),found_target);
-        
+        else
+            target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',found_target);
+        end
+   
         % Find moving average
         local_target = NaN;
         weights = exp(linspace(0, -counter/decay, counter+1));
@@ -63,7 +67,7 @@ while true
             reached_target=true;
         end
     else
-        target_location = start_position;
+        target_location = start_position(1:2)';
     end
     
     %   POLE DETECTION
@@ -71,11 +75,11 @@ while true
     
     %   SLAM
     [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
-        [ranges, bearings], ...
-        state_vector', state_cov);
+        [ranges;bearings], ...
+        state_vector, state_cov);
     
     %   ROUTE PLANNING
-    if mod(counter, 100)
+    if mod(counter, 100)==0
         plan_flag = 1;
     end
     
@@ -87,7 +91,8 @@ while true
     elseif req_new_carrot
         carrot_num = carrot_num + 1;
         carrot = carrots(carrot_num,:);
-        
+    else
+        'hi';
     end
     
     %   MOVE

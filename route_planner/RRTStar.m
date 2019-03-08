@@ -43,8 +43,6 @@ height = 0.5;
 obstacles = BoundPoles(state_vector(4:end),width,height);
 
 
-
-
 q_start.coord = state_vector(1:2);
 q_start.cost = 0;
 q_start.parent = 0;
@@ -54,7 +52,7 @@ q_start.parent = 0;
 % target_coord(3) = target_location(2);
 
 
-q_goal.coord = target_coord';
+q_goal.coord = target_coord;
 q_goal.cost = 0;
 
 nodes(1) = q_start;
@@ -73,7 +71,7 @@ end
 % scatter(q_goal.coord(1), q_goal.coord(2), 'g')
 % hold on
 
-for i = 1:1:numNodes
+for i = 1:1:numNodes;
     
     q_rand = [rand(1)*8 rand(1)*7-3.5];
     if plot_flag
