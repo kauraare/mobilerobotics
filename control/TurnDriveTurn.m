@@ -4,8 +4,8 @@ function request_new_carrot = TurnDriveTurn(husky_config, state_vector, carrot)
 % Set parameters
 angle_threshold = pi/12;
 range_threshold = 0.25;
-angular_vel = 0.5; % rad/sec
-vel = 0.5; % m/s
+angular_vel = 0.3; % rad/sec
+vel = 0.3; % m/s
 request_new_carrot = 0;
 
 % Calculate carrot in local polar coordinates
