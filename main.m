@@ -2,7 +2,7 @@ startup_cdt
 
 clear mexmoos;
 
-husky_id = 4; % Modify for your Husky
+husky_id = 2; % Modify for your Husky
 
 % Get the channel names and sensor IDs for this Husky
 config = GetHuskyConfig(husky_id);
@@ -27,10 +27,10 @@ plan_flag = 1;
 decay = 5; % decay for exponential moving average for target
 target_distance_threshold = 0.3; % distance to target when to stop
 reached_target = false;
-target_location_array = Local2Global(state_vector',[5 r;0;0]);
+target_location_array = Local2Global(state_vector',[5;0;0]);
 while true
     % Fetch latest messages from mex-moos
-    pause(0.01)
+    pause(0.25)
     mailbox = mexmoos('FETCH');
     scan = GetLaserScans(mailbox, config.laser_channel, true);
     stereo_images = GetStereoImages(mailbox, config.stereo_channel, true);
@@ -90,13 +90,18 @@ while true
         plan_flag = 0;
     elseif req_new_carrot
         carrot_num = carrot_num + 1;
-        carrot = carrots(carrot_num,:);
+        if carrot_num > size(carrots, 1)
+            plan_flag = 1;
+        else
+            carrot = carrots(carrot_num,:);
+        end
+       
     else
         'hi';
     end
     
     %   MOVE
+%     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
-    
     counter = counter + 1;
 end

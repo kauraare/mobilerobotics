@@ -25,7 +25,7 @@
 
 function carrots = RRTStar(target_coord, state_vector)
 
-
+clf
 
 plot_flag = 1;
 x_max = 7;
