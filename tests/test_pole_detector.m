@@ -3,7 +3,7 @@
 
 % Change this parameter to toggle between testing the robot online and
 % using prerecorded data.
-online = 1;
+online = 0;
 % Connect to robot
 clear mexmoos;
 
@@ -22,7 +22,7 @@ if online == 1
     pause(4.0); % give mexmoos a chance to connect (important!)
 end
 % initialise state and covariance vector
-state_vector = [0 4 0];
+state_vector = [0 0 0];
 covariance_matrix = eye(3);
 while true
     if online
@@ -33,9 +33,9 @@ while true
         
     else
         "Testing Robot in Offline mode"
-        image_number = string(4396);
-        scan_path = "data/sunbeams/737491."+ image_number +"_scan.mat";
-        image_path = "data/sunbeams/737491."+image_number+"_images.mat";
+        image_number = string(578);
+        scan_path = "data/pole_data/737488."+ image_number +"_scan.mat";
+        image_path = "data/pole_data/737488."+image_number+"_images.mat";
         scan = load(scan_path);
         scan = scan.scan;
         stereo_images = load(image_path);
@@ -59,7 +59,9 @@ while true
         hold on
     end
     
-    axis([-5 5 0 8])
+    axis([-1 7 -3.5 3.5])
+    axis equal
+   
     figure(2)
     
     if online
