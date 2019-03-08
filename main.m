@@ -2,7 +2,7 @@ startup_cdt
 
 clear mexmoos;
 
-husky_id = 2; % Modify for your Husky
+husky_id = 4; % Modify for your Husky
 
 % Get the channel names and sensor IDs for this Husky
 config = GetHuskyConfig(husky_id);
@@ -29,7 +29,7 @@ on_target = 0;
 decay = 5; % decay for exponential moving average for target
 target_distance_threshold = 0.3; % distance to target when to stop
 reached_target = 0;
-target_location_array = Local2Global(state_vector',[5;pi/2]);
+target_location_array = Local2Global(state_vector',[6;pi/3]);
 while true
     % Fetch latest messages from mex-moos
     pause(0.25)
@@ -101,11 +101,11 @@ while true
         scatter(state_vector(i),state_vector(i+1),[],'b');
         hold on
     end
-    axis([-1 7 -3.5 3.5])
+    axis([-1 9 -5.5 2])
     axis equal
     
     %   ROUTE PLANNING
-    if mod(counter, 100)==0
+    if mod(counter, 20)==0
         plan_flag = 1;
     end
     

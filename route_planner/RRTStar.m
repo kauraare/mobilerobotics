@@ -25,7 +25,7 @@
 
 function carrots = RRTStar(target_coord, state_vector)
 
-plot_flag = 1;
+plot_flag = 0;
 x_max = 7;
 y_max = 3.5;
 EPS = 0.5;
@@ -71,7 +71,7 @@ end
 
 for i = 1:1:numNodes;
     
-    q_rand = [rand(1)*8 rand(1)*7-3.5];
+    q_rand = [rand(1)*9 rand(1)*7.5-5.5];
     if plot_flag
         plot(q_rand(1), q_rand(2), 'x', 'Color',  [0 0.4470 0.7410])
     end
