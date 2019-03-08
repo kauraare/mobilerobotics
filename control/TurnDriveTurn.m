@@ -1,5 +1,5 @@
 function request_new_carrot = TurnDriveTurn(husky_config, state_vector, carrot)
-% Make the robot move to the carrot.
+%%% Make the robot move to the carrot.
 
 % Set parameters
 angle_threshold = pi/12;
@@ -50,7 +50,6 @@ else
     pause(0.01);
     return 
 end
-%     last_source_timestamp = wheel_odometry.source_timestamp;
 
-
+% last_source_timestamp = wheel_odometry.source_timestamp;
 end
