@@ -19,7 +19,7 @@ pause(4.0); % give mexmoos a chance to connect (important!)
 SendSpeedCommand(0, 0, config.control_channel)
 counter = 1;
 start_position = [1; 4; 0];
-state_vector = start_position;
+state_vector = start_position';
 state_cov = ones(3,3);
 accum_time = 1e5;
 req_new_carrot = 1;
@@ -27,7 +27,7 @@ plan_flag = 1;
 decay = 5; % decay for exponential moving average for target
 target_distance_threshold = 0.3; % distance to target when to stop
 reached_target = false;
-target_location_array = Local2Global([0;0;0],[3;0;0]);
+target_location_array = Local2Global(state_vector,[3;0;0]);
 while true
     % Fetch latest messages from mex-moos
     pause(0.01)
@@ -39,6 +39,7 @@ while true
         false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     
+    
     if ~reached_target
         %   TARGET DETECTION
         found_target = TargetDetector(config, stereo_images);
@@ -46,9 +47,10 @@ while true
         disp(found_target)
         
         % Append array
-        target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',found_target);
+        target_location_array(:,counter+1) = Local2Global(state_vector(1:3),found_target);
         
         % Find moving average
+        local_target = NaN;
         weights = exp(linspace(0, -counter/decay, counter+1));
         weights(any(isnan(local_target),1)) = 0; % if localtarget is nan set weight to 0
         weights(1)=1e-100; % to ensure at least one is positive
@@ -70,7 +72,7 @@ while true
     %   SLAM
     [state_vector, state_cov] = SLAMUpdate(wheel_odometry, ...
         [ranges, bearings], ...
-        state_vector, state_cov);
+        state_vector', state_cov);
     
     %   ROUTE PLANNING
     if mod(counter, 100)
@@ -78,13 +80,14 @@ while true
     end
     
     if req_new_carrot && plan_flag
-        carrots = RRTStar(target_location, state_vector);
-        carrot = carrots(end,:);
+        carrots = RRTStar(target_location', state_vector');
+        carrot = carrots(1,:);
         carrot_num = 1;
         plan_flag = 0;
     elseif req_new_carrot
-        carrot = carrots(end-carrot_num,:);
         carrot_num = carrot_num + 1;
+        carrot = carrots(carrot_num,:);
+        
     end
     
     %   MOVE

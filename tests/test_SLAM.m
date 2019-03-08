@@ -19,7 +19,7 @@ pause(4.0); % give mexmoos a chance to connect (important!)
 SendSpeedCommand(0, 0, config.control_channel)
 found_target_flag = 0;
 counter = 1;
-state_vector = [1; 4; 0];
+state_vector = [0; 0; 0];
 state_cov = ones(3,3);
 accum_time = 1e5;
 req_new_carrot = 1;
@@ -35,8 +35,6 @@ while true
         config.wheel_odometry_channel, ...
         false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
-%     PLEASE CONSULT SAAD BEFORE CONSIDERING CHANGING THIS
-    wheel_odometry(3) = -wheel_odometry(3); % SERIOUSLY
     [ranges, angles] = DetectPoles(scan)
 
     wheel_odometry'
@@ -55,7 +53,7 @@ while true
         hold on
     end
     
-    axis([0 8 0 8])
+    axis([-1 7 -3.5 3.5])
     
     state_vector(1:3)'
 end

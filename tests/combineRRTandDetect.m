@@ -42,38 +42,18 @@ while true
     end
     
     %      get ranges and angles of the poles
-    [ranges, angles] = DetectPoles(scan)
+    [ranges, angles] = DetectPoles(scan);
     
     
     %      now pass these ranges and angles to SLAM
-    [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges;angles], state_vector', covariance_matrix)
+    [state_vector, covariance_matrix] = SLAMUpdate([0 0 0]', [ranges;angles], state_vector', covariance_matrix);
     
-    %     plot own position
-    figure
-    scatter(state_vector(1),state_vector(2),[],'g')
+    target = [3 -.5];
+    
+% %     plot target location
+    scatter(target(1),target(2),'r')
     hold on
-    %       plot map showing detected poles in a 2d map
     
-    for i = 4:2:size(state_vector)
-        scatter(state_vector(i),state_vector(i+1),[],'r');
-        hold on
-    end
+    carrots = RRTStar(target',state_vector');
     
-    axis([-1 7 -3.5 3.5])
-    axis equal
-   
-    figure(2)
-    
-    if online
-        imshow(stereo_images.left.rgb)
-    else
-        imshow(stereo_images.undistorted_stereo_images.left.rgb)
-    end
-    
-    %      figure
-    %      subplot(2,1,1)
-    %      plot(scan.reflectances)
-    %      subplot(2,1,2)
-    %      plot(scan.ranges)
-    break
 end

@@ -29,7 +29,7 @@ target_location = Local2Global([0;0;0],[3;0;0]);
 
 % the route we want to take
 trajectories = zeros(3,2,3);
-trajectories(:,:,1) = [[1,4];[2,5];[1,5]];
+trajectories(:,:,1) = [[0,5];[0,4];[0,5]];
 trajectories(:,:,2) = [[1,4];[2,5];[1,5]];
 trajectories(:,:,3) = [[1,4];[2,5];[1,5]];
 traj_counter = 1;
@@ -87,7 +87,7 @@ while true
         hold on
     end
     
-    axis([0 8 0 8])
+    axis([-1 8 -1 8])
     
     carrot
     state_vector(1:3)'
