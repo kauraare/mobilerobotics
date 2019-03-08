@@ -42,7 +42,10 @@ request_new_carrot = 0;
 
 if delta_angle > angle_threshold
     'Turning'
-    SendSpeedCommand(0, angular_vel, husky_config.control_channel);
+    if delta_angle > 0
+        SendSpeedCommand(0, -angular_vel, husky_config.control_channel);
+    else
+        SendSpeedCommand(0, angular_vel, husky_config.control_channel);
     pause(0.01);
 elseif delta_range > range_threshold
     'Driving'

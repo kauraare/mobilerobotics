@@ -35,8 +35,7 @@ while true
         config.wheel_odometry_channel, ...
         false);
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
-%     PLEASE CONSULT SAAD BEFORE CONSIDERING CHANGING THIS
-    wheel_odometry(3) = -wheel_odometry(3); % SERIOUSLY
+
     [ranges, angles] = DetectPoles(scan)
 
     wheel_odometry'
