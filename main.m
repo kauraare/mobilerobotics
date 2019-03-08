@@ -2,7 +2,7 @@ startup_cdt
 
 clear mexmoos;
 
-husky_id = 4; % Modify for your Husky
+husky_id = 2; % Modify for your Husky
 
 % Get the channel names and sensor IDs for this Husky
 config = GetHuskyConfig(husky_id);
@@ -29,7 +29,7 @@ on_target = 0;
 decay = 5; % decay for exponential moving average for target
 target_distance_threshold = 0.3; % distance to target when to stop
 reached_target = 0;
-target_location_array = Local2Global(state_vector',[6;pi/3]);
+target_location_array = Local2Global(state_vector',[8;1.13]);
 while true
     % Fetch latest messages from mex-moos
     pause(0.25)
@@ -43,10 +43,14 @@ while true
     
     
     if reached_target==0
+        if state_vector(1) < 3.5
+            found_target = target_location_array(:,1);
+        else
         %   TARGET DETECTION
         found_target = TargetDetector(config, stereo_images);
         disp("~ FOUND THE TARGET AT ~")
         disp(found_target)
+        end
         
         % Append array
         if size(state_vector,1)==1
