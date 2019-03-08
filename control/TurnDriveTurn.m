@@ -38,6 +38,7 @@ if abs(delta_angle) > angle_threshold
         SendSpeedCommand(0, -angular_vel, husky_config.control_channel);
     else
         SendSpeedCommand(0, angular_vel, husky_config.control_channel);
+    end
     pause(0.01);
 elseif delta_range > range_threshold
     'Driving forward'
