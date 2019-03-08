@@ -92,6 +92,18 @@ while true
         [ranges;bearings], ...
         state_vector, state_cov);
     
+    clf
+    scatter(state_vector(1),state_vector(2),[],'g')
+    hold on
+    scatter(target_location(1), target_location(2), [], 'r')
+    hold on
+    for i = 4:2:size(state_vector)
+        scatter(state_vector(i),state_vector(i+1),[],'b');
+        hold on
+    end
+    axis([-1 7 -3.5 3.5])
+    axis equal
+    
     %   ROUTE PLANNING
     if mod(counter, 100)==0
         plan_flag = 1;
@@ -113,6 +125,9 @@ while true
     else
         'hi';
     end
+    
+    scatter(carrot(1), carrot(2), [], 'c')
+    hold on
     
     %   MOVE
     %     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
