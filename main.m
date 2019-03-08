@@ -24,10 +24,12 @@ state_cov = ones(3,3);
 accum_time = 1e5;
 req_new_carrot = 1;
 plan_flag = 1;
+got_here = 0;
+on_target = 0;
 decay = 5; % decay for exponential moving average for target
 target_distance_threshold = 0.3; % distance to target when to stop
-reached_target = false;
-target_location_array = Local2Global(state_vector',[5;0;0]);
+reached_target = 0;
+target_location_array = Local2Global(state_vector',[5;pi/2]);
 while true
     % Fetch latest messages from mex-moos
     pause(0.25)
@@ -40,7 +42,7 @@ while true
     wheel_odometry = ComposeWheelOdom(wheel_odometry_all);
     
     
-    if ~reached_target
+    if reached_target==0
         %   TARGET DETECTION
         found_target = TargetDetector(config, stereo_images);
         disp("~ FOUND THE TARGET AT ~")
@@ -48,11 +50,11 @@ while true
         
         % Append array
         if size(state_vector,1)==1
-        target_location_array(:,counter+1) = Local2Global(state_vector(1:3),found_target);
+            target_location_array(:,counter+1) = Local2Global(state_vector(1:3),found_target);
         else
             target_location_array(:,counter+1) = Local2Global(state_vector(1:3)',found_target);
         end
-   
+        
         % Find moving average
         local_target = NaN;
         weights = exp(linspace(0, -counter/decay, counter+1));
@@ -63,11 +65,23 @@ while true
         
         % Check if we have reached target
         
+        
         if any(isnan(local_target(:,end))) && norm(target_location(1:2)-state_vector(1:2)) < target_distance_threshold
-            reached_target=true;
+            
+            reached_target=1; % close enough to target
         end
     else
-        target_location = start_position(1:2)';
+        if on_target == 0
+            if req_new_carrot == 1 && got_here
+                on_target = 1;
+            else
+                target_location = Local2Global(state_vector(1:3)',[0.5,pi/2]);
+                got_here = 1;
+            end
+
+        else
+            target_location = start_position(1:2)';
+        end
     end
     
     %   POLE DETECTION
@@ -95,13 +109,13 @@ while true
         else
             carrot = carrots(carrot_num,:);
         end
-       
+        
     else
         'hi';
     end
     
     %   MOVE
-%     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
+    %     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
     req_new_carrot = TurnDriveTurn(config, state_vector, carrot);
     counter = counter + 1;
 end
